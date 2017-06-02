@@ -1,0 +1,12 @@
+{% for vlan in vars['vlan']['vlan_list']|sort %}
+- parents:
+{% if vars['vlan']['vlan_list'][vlan]['end_range'] != 0 %}
+  - vlan {{ vlan }}-{{ vars['vlan']['vlan_list'][vlan]['end_range'] }}
+{% else %}
+  - vlan {{ vlan }}
+{% endif %}
+  lines:
+{% if 'name' in vars['vlan']['vlan_list'][vlan] %}
+  - " name {{ vars['vlan']['vlan_list'][vlan]['name'] }}"
+{% endif %}
+{% endfor %}

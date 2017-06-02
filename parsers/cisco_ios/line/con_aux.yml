@@ -21,6 +21,15 @@
               "{{ number }}":
                 number: "{{ number }}"
       lines:
+      - regex: '^ logging synchronous$'
+        examples:
+        - ' logging synchronous'
+        path:
+          line:
+            "{{ type }}":
+              numbers:
+                "{{ number }}":
+                  logging_synchronous: True
       - regex: '^ exec-timeout (\d+) (\d+)$'
         exmaples:
         - ' exec-timeout 15 0'
@@ -49,6 +58,16 @@
                   password:
                     encryption_type: "{{ encryption_type }}"
                     password: "{{ password }}"
+      - regex: '^ login local$'
+        exmaples:
+        - ' login local'
+        path:
+          line:
+            "{{ type }}":
+              numbers:
+                "{{ number }}":
+                  login:
+                    local: True
       - regex: '^ login authentication (\S+)$'
         exmaples:
         - ' login authentication CONSOLE'

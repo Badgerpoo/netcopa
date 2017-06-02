@@ -1,5 +1,5 @@
-- parents:
-  lines:
 {% for name_server in vars['ip']['name-servers'] %}
+- parents:
   - 'ip name-server {{ name_server['name_server'] }}'
+  lines:
 {% endfor %}

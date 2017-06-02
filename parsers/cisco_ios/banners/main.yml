@@ -5,7 +5,7 @@
   - name: banner
     template: banners/default.j2
     lines:
-    - regex: '^banner (\w+) (.+)$'
+    - regex: '^banner (\w+) (\^C|.+).*$'
       exmaples:
       - 'banner exec ^C'
       captures:

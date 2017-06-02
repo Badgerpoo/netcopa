@@ -19,6 +19,35 @@
               start: "{{ start }}"
               finish: "{{ finish }}"
       lines:
+      - regex: '^ access-class (\d+) (\S+)$'
+        examples:
+        - ' access-class 98 in'
+        captures:
+        - acl_id
+        - direction
+        path:
+          line:
+            vty:
+              "{{ start }}to{{ finish }}":
+                access_class:
+                  acl_id: "{{ acl_id }}"
+                  direction: "{{ direction }}"
+      - regex: '^ logging synchronous$'
+        examples:
+        - ' logging synchronous'
+        path:
+          line:
+            vty:
+              "{{ start }}to{{ finish }}":
+                logging_synchronous: True
+      - regex: '^ login local$'
+        examples:
+        - ' login local'
+        path:
+          line:
+            vty:
+              "{{ start }}to{{ finish }}":
+                login_local: True
       - regex: '^ exec-timeout (\d+) (\d+)$'
         examples:
         - ' exec-timeout 15 0'
@@ -45,19 +74,42 @@
                 password:
                   encryption_type: "{{ encryption_type }}"
                   password: "{{ password }}"
-      - regex: '^ transport (\w+) (.*)$'
+      - regex: '^ transport preferred (.*)$'
         examples:
-        - ' transport input ssh'
+        - ' transport preferred none'
         captures:
-        - direction
         - protocols
         path:
           line:
             vty:
               "{{ start }}to{{ finish }}":
                 transport:
-                  "{{ direction }}":
-                    protocols: "{{ protocols.split() }}"
+                  preferred:
+                    protocols: "{{ protocols }}"
+      - regex: '^ transport input (.*)$'
+        examples:
+        - ' transport input ssh'
+        captures:
+        - protocols
+        path:
+          line:
+            vty:
+              "{{ start }}to{{ finish }}":
+                transport:
+                  input:
+                    protocols: "{{ protocols }}"
+      - regex: '^ transport output (.*)$'
+        examples:
+        - ' transport output ssh'
+        captures:
+        - protocols
+        path:
+          line:
+            vty:
+              "{{ start }}to{{ finish }}":
+                transport:
+                  output:
+                    protocols: "{{ protocols }}"
       - regex: '^ escape-character (\S+)$'
         examples:
         - ' escape-character BREAK'

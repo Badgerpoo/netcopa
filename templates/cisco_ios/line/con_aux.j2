@@ -4,11 +4,17 @@
 - parents:
   - line {{ vars['line'][entry]['type'] }} {{ vars['line'][entry]['numbers'][number]['number'] }}
   lines:
+{% if 'logging_synchronous' in vars['line'][entry]['numbers'][number] %}
+  - " logging synchronous"
+{% endif %}
 {% if 'exec_timeout' in vars['line'][entry]['numbers'][number] %}
   - " exec-timeout {{ vars['line'][entry]['numbers'][number]['exec_timeout']['minutes'] }} {{ vars['line'][entry]['numbers'][number]['exec_timeout']['seconds'] }}"
 {% endif %}
 {% if 'password' in vars['line'][entry]['numbers'][number] %}
   - " password {{ vars['line'][entry]['numbers'][number]['password']['encryption_type'] }} {{ vars['line'][entry]['numbers'][number]['password']['password'] }}"
+{% endif %}
+{% if 'login' in vars['line'][entry]['numbers'][number] and 'local' in vars['line'][entry]['numbers'][number]['login'] %}
+  - " login local"
 {% endif %}
 {% if 'login' in vars['line'][entry]['numbers'][number] and 'authentication' in vars['line'][entry]['numbers'][number]['login'] %}
   - " login authentication {{ vars['line'][entry]['numbers'][number]['login']['authentication'] }}"
