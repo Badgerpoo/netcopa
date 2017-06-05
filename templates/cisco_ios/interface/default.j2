@@ -92,6 +92,13 @@
 {% if 'shutdown' in vars['interfaces'][interface] and vars['interfaces'][interface]['shutdown'] %}
   - " shutdown"
 {% endif %} #shutdown
+{% if 'power' in vars['interfaces'][interface] %}
+{% if 'inline' in vars['interfaces'][interface]['power'] %}
+{% if 'police' in vars['interfaces'][interface]['power']['inline'] %}
+  - " power inline police"
+{% endif %} #police
+{% endif %} #inline
+{% endif %} #power
 {% if 'negotiation' in vars['interfaces'][interface] and vars['interfaces'][interface]['negotiation']['negate'] %}
   - " no negotiation {{ vars['interfaces'][interface]['negotiation']['type'] }}"
 {% endif %} #no negotiation

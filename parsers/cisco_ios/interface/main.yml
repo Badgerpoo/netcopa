@@ -103,6 +103,14 @@
               switchport:
                 voice:
                   vlan: "{{ vlan }}"
+      - regex: '^ power inline police$'
+        examples:
+        - ' power inline police'
+        path:
+          interfaces:
+            "{{ name }}":
+              power:
+                inline: "police"
       - regex: '^ channel-group (\d{1,3}) mode (.*)$'
         examples:
         - ' channel-group 1 mode desirable'
