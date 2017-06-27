@@ -148,6 +148,21 @@ def get_configurations():
         print_log('ok', 'ok')
     return devices
 
+def ensure_host_vars(devices, src_dir):
+    """ Create host_vars file if missing
+
+    Hard coded to cisco_ios currently
+
+    """
+    for device in devices:
+        if not device['failed']:
+            filename = src_dir + '/' + device['hostname'] + '.yml'
+            if not os.path.isfile(filename):
+                myfile = open(filename, 'w')
+                content = '---\nos: cisco_ios\n'
+                myfile.write(content)
+    return devices
+
 def copy_host_vars(devices, src_dir, dst_dir):
     """ Copy files between directories
 
@@ -784,6 +799,8 @@ def run(args):
     """
     print_log('Loading configurations', 'header')
     devices = get_configurations()
+    print_log('Ensure host_vars exist', 'header')
+    devices = ensure_host_vars(devices, HOST_VARS)
     print_log('Copy host_vars entry to temp directory', 'header')
     devices = copy_host_vars(devices, HOST_VARS, HOST_VARS_TEMP)
     print_log('Retrieving OS', 'header')

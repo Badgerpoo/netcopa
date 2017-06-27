@@ -42,6 +42,21 @@
 {% if 'negate' in vars['interfaces'][interface]['switchport'] and vars['interfaces'][interface]['switchport']['negate'] %}
   - " no switchport"
 {% endif %} #negate
+{% if 'port_security' in vars['interfaces'][interface]['switchport'] %}
+{% if 'maximum' in vars['interfaces'][interface]['switchport']['port_security'] %}
+  - " switchport port-security maximum {{ vars['interfaces'][interface]['switchport']['port_security']['maximum'] }}"
+{% endif %} #maximum
+  - " switchport port-security"
+{% if 'aging_time' in vars['interfaces'][interface]['switchport']['port_security'] %}
+  - " switchport port-security aging time {{ vars['interfaces'][interface]['switchport']['port_security']['aging_time'] }}"
+{% endif %} #aging_time
+{% if 'violation' in vars['interfaces'][interface]['switchport']['port_security'] %}
+  - " switchport port-security violation {{ vars['interfaces'][interface]['switchport']['port_security']['violation'] }}"
+{% endif %} #violation
+{% if 'aging' in vars['interfaces'][interface]['switchport']['port_security'] %}
+  - " switchport port-security aging {{ vars['interfaces'][interface]['switchport']['port_security']['aging'] }}"
+{% endif %} #violation
+{% endif %} #port_security
 {% endif %} #switchport
 {% if 'channel_group' in vars['interfaces'][interface] %}
   - " channel-group {{ vars['interfaces'][interface]['channel_group'] }} mode {{ vars['interfaces'][interface]['channel_group_mode']|join(' ') }}"
@@ -68,12 +83,23 @@
   - " ip helper-address {{ address['ipv4_helper_address'] }}"
 {% endfor %} # helpers
 {% endif %} #helper_addresses
+{% if 'access_group' in vars['interfaces'][interface]['ip'] %}
+{% for acl in vars['interfaces'][interface]['ip']['access_group'] %}
+  - " ip access-group {{ acl['acl_id'] }} {{ acl['direction'] }}"
+{% endfor %}
+{% endif %} #access_group
 {% if 'route_cache' in vars['interfaces'][interface]['ip'] %}
   - " ip route-cache {{ vars['interfaces'][interface]['ip']['route_cache'] }}"
 {% endif %} #route-cache
+{% if 'no_route_cache' in vars['interfaces'][interface]['ip'] %}
+  - " no ip route-cache"
+{% endif %} #no-route-cache
 {% if 'policy_route_map' in vars['interfaces'][interface]['ip'] %}
   - " ip policy route-map {{ vars['interfaces'][interface]['ip']['policy_route_map'] }}"
 {% endif %} #policy_route_map
+{% if 'dhcp_snooping' in vars['interfaces'][interface]['ip'] %}
+  - " ip dhcp snooping trust"
+{% endif %} #dhcp_snooping_trust
 {% endif %} #ip
 {% if 'shutdown' in vars['interfaces'][interface] and vars['interfaces'][interface]['shutdown'] %}
   - " shutdown"
@@ -92,5 +118,15 @@
   - " service-policy {{ service_policy['direction'] }} {{ service_policy['name'] }}"
 {% endfor %} # helpers
 {% endif %} #helper_addresses
-
+{% if 'cdp_disable' in vars['interfaces'][interface] %}
+  - " no cdp enable"
+{% endif %} #cdp_disable
+{% if 'spanning_tree' in vars['interfaces'][interface] %}
+{% if 'portfast' in vars['interfaces'][interface]['spanning_tree'] %}
+  - " spanning-tree portfast"
+{% endif %} #spanning_tree_portfast
+{% if 'guard_root' in vars['interfaces'][interface]['spanning_tree'] %}
+  - " spanning-tree guard root"
+{% endif %} #spanning_tree_guard_root
+{% endif %} #spanning_tree
 {% endfor %}
