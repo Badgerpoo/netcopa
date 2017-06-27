@@ -2,6 +2,15 @@
 - parents:
   - line vty {{ vars['line']['vty'][num]['start'] }} {{ vars['line']['vty'][num]['finish'] }}
   lines:
+{% if 'access_class' in vars['line']['vty'][num] %}
+  - " access-class {{ vars['line']['vty'][num]['access_class']['acl_id'] }} {{ vars['line']['vty'][num]['access_class']['direction'] }}"
+{% endif %}
+{% if 'logging_synchronous' in vars['line']['vty'][num] %}
+  - " logging synchronous"
+{% endif %}
+{% if 'login_local' in vars['line']['vty'][num] %}
+  - " login local"
+{% endif %}
 {% if 'exec_timeout' in vars['line']['vty'][num] %}
   - " exec-timeout {{ vars['line']['vty'][num]['exec_timeout']['minutes'] }} {{ vars['line']['vty'][num]['exec_timeout']['seconds'] }}"
 {% endif %}
@@ -12,9 +21,15 @@
   - " password {{ vars['line']['vty'][num]['password']['encryption_type'] }} {{ vars['line']['vty'][num]['password']['password'] }}"
 {% endif %}
 {% if 'transport' in vars['line']['vty'][num] %}
-{% for direction in vars['line']['vty'][num]['transport'] %}
-  - " transport {{ direction }} {{ vars['line']['vty'][num]['transport'][direction]['protocols']|join(' ') }}"
-{% endfor %}
+{% if 'preferred' in vars['line']['vty'][num]['transport'] %}
+  - " transport preferred {{ vars['line']['vty'][num]['transport']['preferred']['protocols'] }}"
+{% endif %}
+{% if 'input' in vars['line']['vty'][num]['transport'] %}
+  - " transport input {{ vars['line']['vty'][num]['transport']['input']['protocols'] }}"
+{% endif %}
+{% if 'output' in vars['line']['vty'][num][transport] %}
+  - " transport preferred {{ vars['line']['vty'][num][transport]['output']['protocols'] }}"
+{% endif %}
 {% endif %}
 {% if 'escape_character' in vars['line']['vty'][num] %}
   - " escape-character {{ vars['line']['vty'][num]['escape_character'] }}"

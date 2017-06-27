@@ -2495,8 +2495,7 @@ vars:
         start: 0
         transport:
           input:
-            protocols:
-            - ssh
+            protocols: ssh
       5to15:
         escape_character: BREAK
         exec_timeout:
@@ -2510,8 +2509,7 @@ vars:
         start: 5
         transport:
           input:
-            protocols:
-            - ssh
+            protocols: ssh
   logging:
     facility: local6
     hosts:

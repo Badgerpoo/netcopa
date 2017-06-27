@@ -39,6 +39,11 @@
 {% if 'mode' in vars['interfaces'][interface]['switchport'] %}
   - " switchport mode {{ vars['interfaces'][interface]['switchport']['mode']|join(' ') }}"
 {% endif %} #mode
+{% if 'voice' in vars['interfaces'][interface]['switchport'] %}
+{% if 'vlan' in vars['interfaces'][interface]['switchport']['voice'] %}
+  - " switchport voice vlan {{ vars['interfaces'][interface]['switchport']['voice']['vlan'] }}"
+{% endif %} #vlan
+{% endif %} #voice
 {% if 'negate' in vars['interfaces'][interface]['switchport'] and vars['interfaces'][interface]['switchport']['negate'] %}
   - " no switchport"
 {% endif %} #negate
@@ -89,7 +94,16 @@
 {% endfor %}
 {% endif %} #access_group
 {% if 'route_cache' in vars['interfaces'][interface]['ip'] %}
+{% if 'access_group' in vars['interfaces'][interface]['ip'] %}
+{% for access_group in vars['interfaces'][interface]['ip']['access_group'] %}
+  - " ip access-group {{ access_group['acl_id'] }} {{ access_group['direction'] }}"
+{% endfor %}
+{% endif %} #access-group
+{% if 'negate' in vars['interfaces'][interface]['ip']['route_cache'] %}
+  - " no ip route-cache"
+{% else %}
   - " ip route-cache {{ vars['interfaces'][interface]['ip']['route_cache'] }}"
+{% endif %} #route-cache-negate
 {% endif %} #route-cache
 {% if 'no_route_cache' in vars['interfaces'][interface]['ip'] %}
   - " no ip route-cache"
@@ -104,6 +118,13 @@
 {% if 'shutdown' in vars['interfaces'][interface] and vars['interfaces'][interface]['shutdown'] %}
   - " shutdown"
 {% endif %} #shutdown
+{% if 'power' in vars['interfaces'][interface] %}
+{% if 'inline' in vars['interfaces'][interface]['power'] %}
+{% if 'police' in vars['interfaces'][interface]['power']['inline'] %}
+  - " power inline police"
+{% endif %} #police
+{% endif %} #inline
+{% endif %} #power
 {% if 'negotiation' in vars['interfaces'][interface] and vars['interfaces'][interface]['negotiation']['negate'] %}
   - " no negotiation {{ vars['interfaces'][interface]['negotiation']['type'] }}"
 {% endif %} #no negotiation
@@ -114,7 +135,7 @@
   - " ip pim {{ vars['interfaces'][interface]['ip']['pim']['mode'] }}"
 {% endif %} #pim mode
 {% if 'service_policies' in vars['interfaces'][interface] %}
-{% for service_policy in vars['interfaces'][interface]['service_policies'] %}
+{% for service_policy in vars['interfaces'][interface] %}
   - " service-policy {{ service_policy['direction'] }} {{ service_policy['name'] }}"
 {% endfor %} # helpers
 {% endif %} #helper_addresses

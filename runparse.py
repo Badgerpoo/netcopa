@@ -146,6 +146,10 @@ def get_configurations():
         device['working_configuration'] = device['configuration']
         devices.append(device)
         print_log('ok', 'ok')
+        """ Create the host_vars automatically for each configuration loaded. Assumes Cisco IOS. """
+        host_vars_path = 'host_vars/'+device_config.rstrip('.svn')+'.yml'
+        host_vars_file_to_create = open(host_vars_path,'w')
+        host_vars_file_to_create.write('os: cisco_ios')
     return devices
 
 def ensure_host_vars(devices, src_dir):

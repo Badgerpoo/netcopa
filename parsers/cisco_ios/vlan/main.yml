@@ -13,3 +13,29 @@
       path:
         vlan:
           internal_allocation_policy: "{{ direction }}"
+  - name: vlans
+    template: vlan/vlan_list.j2
+    lines:
+    - regex: '^vlan (\d+)-?(\d+)?$'
+      examples:
+      - 'vlan 10'
+      captures:
+      - number
+      - end_range
+      path:
+        vlan:
+          vlan_list:
+            "{{ number }}":
+              number: "{{ number }}"
+              end_range: "{{ end_range }}"
+      lines:
+      - regex: '^ name (\S+)$'
+        examples:
+        - ' name users'
+        captures:
+        - name
+        path:
+          vlan:
+            vlan_list:
+              "{{ number }}":
+                name: "{{ name }}"
