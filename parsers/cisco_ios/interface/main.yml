@@ -225,19 +225,6 @@
               ip:
                 helper_addresses:
                 - ipv4_helper_address: "{{ ipv4_helper_address }}"
-      - regex: '^ ip access-group (.+) (in|out)$'
-        examples:
-        - ' ip access-group 10 in'
-        captures:
-        - acl_id
-        - direction
-        path:
-          interfaces:
-            "{{ name }}":
-              ip:
-                access_group:
-                - direction: "{{ direction }}"
-                  acl_id: "{{ acl_id }}"
       - regex: '^ no ip route-cache$'
         examples:
         - ' no ip route-cache'
@@ -257,14 +244,6 @@
             "{{ name }}":
               ip:
                 route_cache: "{{ route_cache }}"
-      - regex: '^ no ip route-cache$'
-        examples:
-        - ' no ip route-cache'
-        path:
-          interfaces:
-            "{{ name }}":
-              ip:
-                no_route_cache: True
       - regex: '^ ip policy route-map (\S+)$'
         examples:
         - ' ip policy route-map foo-test'
