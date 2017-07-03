@@ -94,20 +94,12 @@
 {% endfor %}
 {% endif %} #access_group
 {% if 'route_cache' in vars['interfaces'][interface]['ip'] %}
-{% if 'access_group' in vars['interfaces'][interface]['ip'] %}
-{% for access_group in vars['interfaces'][interface]['ip']['access_group'] %}
-  - " ip access-group {{ access_group['acl_id'] }} {{ access_group['direction'] }}"
-{% endfor %}
-{% endif %} #access-group
 {% if 'negate' in vars['interfaces'][interface]['ip']['route_cache'] %}
   - " no ip route-cache"
 {% else %}
   - " ip route-cache {{ vars['interfaces'][interface]['ip']['route_cache'] }}"
 {% endif %} #route-cache-negate
 {% endif %} #route-cache
-{% if 'no_route_cache' in vars['interfaces'][interface]['ip'] %}
-  - " no ip route-cache"
-{% endif %} #no-route-cache
 {% if 'policy_route_map' in vars['interfaces'][interface]['ip'] %}
   - " ip policy route-map {{ vars['interfaces'][interface]['ip']['policy_route_map'] }}"
 {% endif %} #policy_route_map
